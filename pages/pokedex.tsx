@@ -24,7 +24,7 @@ const Pokedex = (): ReactElement => {
   }, []);
 
   const handleSearchChange = (e) => {
-    const newSearch = e.target.value;
+    const newSearch = String(e.target.value).toLowerCase();
     setSearch(newSearch);
     if (newSearch === '') {
       setVisiblePokemons(pokemons);
