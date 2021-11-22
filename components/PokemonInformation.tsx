@@ -53,10 +53,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     });
   }, [props.pokemon]);
 
-  const typeObjects = allTypes.filter((type) => {
-    return (pokemonInformation && pokemonInformation.types && pokemonInformation.types.find((t) => t.type === type.name));
-  });
-
   const handleClose = () => {
     setPokemonInformation(null);
     props.onClose();
@@ -65,6 +61,32 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   if (!pokemonInformation) {
     return null;
   }
+
+  const typeObjects = allTypes.filter((type) => {
+    return (pokemonInformation && pokemonInformation.types && pokemonInformation.types.find((t) => t.type === type.name));
+  });
+
+  let superEffectiveTypes = typeObjects.reduce((current, typeObject) => {
+    return [...current, ...typeObject.defenseSuperEffective];
+  }, []);
+  let resistantTypes = typeObjects.reduce((current, typeObject) => {
+    return [...current, ...typeObject.defenseResistance];
+  }, []);
+  const immuneTypes = typeObjects.reduce((current, typeObject) => {
+    return [...current, ...typeObject.defenseImmune];
+  }, []);
+
+  const superEffectiveResistant = [];
+  superEffectiveTypes = superEffectiveTypes.filter((type) => {
+    if (resistantTypes.find((t) => t === type)) {
+      superEffectiveResistant.push(type);
+      return false;
+    }
+    return true;
+  });
+  resistantTypes = resistantTypes.filter((type) => {
+    return superEffectiveResistant.indexOf(type) === -1;
+  });
 
   return (
     <>
@@ -75,166 +97,133 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     onClose={handleClose}
     onOpen={props.onOpen}
   >
-      <Box
-      sx={{ minHeight: '80vh' }}
-    >
-      <Grid container spacing={2}>
-      <Grid item xs={12}>
-      <Paper>
-      <Typography variant="h1" component="div">
-      {capitalize(pokemonInformation.name)}
-      </Typography>
-      {
-        pokemonInformation.types.map((type) => {
-          return (
-            <Chip
-            key={type.slot}
-            label={type.type}
-            />
-          );
-        })
-      }
-      <Button onClick={() => setCatchingPokemon(true)}>Catch</Button>
-      </Paper>
-      </Grid>
-      <Grid item xs={12}>
-      <Paper>
-      <Typography gutterBottom variant="h6" component="div">
-      Super Effective Against This
-      </Typography>
-      {typeObjects.map((type) => {
+    <Box
+    sx={{ minHeight: '80vh', padding: 1 }}
+  >
+    <Grid container spacing={2}>
+    <Grid item xs={12}>
+    <Paper sx={{ padding: 1 }}>
+    <Typography variant="h3" align="center" gutterBottom component="div">
+    {capitalize(pokemonInformation.name)}
+    </Typography>
+    <Button onClick={() => setCatchingPokemon(true)}>Catch</Button>
+    </Paper>
+    </Grid>
+    <Grid item xs={12}>
+    <Paper sx={{ padding: 1 }}>
+    <Grid container spacing={1}>
+    <Grid item xs={6} sx={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+    <img src={pokemonInformation.image.default} />
+    </Grid>
+    <Grid item xs={6} sx={{ alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+    <img src={pokemonInformation.image.shiny} />
+    </Grid>
+    </Grid>
+    </Paper>
+    </Grid>
+    <Grid item xs={12}>
+    <Paper sx={{ padding: 1 }}>
+    <Typography variant="h5" gutterBottom component="div">
+    Types
+    </Typography>
+    {
+      pokemonInformation.types.map((type) => {
         return (
-          <React.Fragment key={type.name}>
-          {type.defenseSuperEffective.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-
-      <Typography gutterBottom variant="h6" component="div">
-      Resistant Against This
-      </Typography>
-      {typeObjects.map((type) => {
-        return (
-          <React.Fragment key={type.name}>
-          {type.defenseResistance.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-
-      <Typography gutterBottom variant="h6" component="div">
-      Immune Against This
-      </Typography>
-      {typeObjects.map((type) => {
-        return (
-          <React.Fragment key={type.name}>
-          {type.defenseImmune.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-
-      <Typography gutterBottom variant="h6" component="div">
-      Super Effective From This
-      </Typography>
-      {typeObjects.map((type) => {
-        return (
-          <React.Fragment key={type.name}>
-          {type.attackSuperEffective.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-
-      <Typography gutterBottom variant="h6" component="div">
-      Resistant From This
-      </Typography>
-      {typeObjects.map((type) => {
-        return (
-          <React.Fragment key={type.name}>
-          {type.attackResistance.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-
-      <Typography gutterBottom variant="h6" component="div">
-      Immune From This
-      </Typography>
-      {typeObjects.map((type) => {
-        return (
-          <React.Fragment key={type.name}>
-          {type.attackImmune.map((t) => (
-            <Chip label={capitalize(t)} key={t} />
-          ))}
-          </React.Fragment>
-        );
-      })}
-      </Paper>
-      </Grid>
-      <Grid item xs={12}>
-      <Paper>
-      <Typography gutterBottom variant="h6" component="div">
-      Base Stats
-      </Typography>
-      <List>
-      {pokemonInformation.stats.map((stat) => {
-        return (
-          <ListItem key={stat.stat}>
-          <ListItemText
-          primary={`${capitalize(stat.stat)}: ${stat.base}${stat.effort > 0 ? ` EV+${stat.effort}` : ''}`}
+          <Chip
+          key={type.slot}
+          label={type.type}
           />
-          </ListItem>
         );
-      })}
-      </List>
-      </Paper>
-      </Grid>
-      <Grid item xs={12}>
-      <Paper>
-      <Typography gutterBottom variant="h6" component="div">
-      Locations
-      </Typography>
-      {
-        pokemonInformation.encounters.map((encounter, index) => {
-          return (
-            <Accordion key={index} expanded={expandedLocation === index} onChange={handleChangeExpandedLocation(index)}>
-            <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`${index}-content`}
-            id={`${index}-header`}
-            >
+      })
+    }
+    {superEffectiveTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
+    Super Effective Against This
+    </Typography>
+    {superEffectiveTypes.map((type) => {
+      return (
+        <Chip label={capitalize(type)} key={type} />
+      );
+    })}</>)
+    }
+
+    {resistantTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
+    Resistant Against This
+    </Typography>
+    {resistantTypes.map((type) => {
+      return (
+        <Chip label={capitalize(type)} key={type} />
+      );
+    })}</>)
+    }
+
+    {immuneTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
+    Immune Against This
+    </Typography>
+    {immuneTypes.map((type) => {
+      return (
+        <Chip label={capitalize(type)} key={type} />
+      );
+    })}</>)
+    }
+    </Paper>
+    </Grid>
+    <Grid item xs={12}>
+    <Paper sx={{ padding: 1 }}>
+    <Typography gutterBottom variant="h6" component="div">
+    Base Stats
+    </Typography>
+    <List>
+    {pokemonInformation.stats.map((stat) => {
+      return (
+        <ListItem key={stat.stat}>
+        <ListItemText
+        primary={`${capitalize(stat.stat)}: ${stat.base}${stat.effort > 0 ? ` EV+${stat.effort}` : ''}`}
+        />
+        </ListItem>
+      );
+    })}
+    </List>
+    </Paper>
+    </Grid>
+    <Grid item xs={12}>
+    <Paper sx={{ padding: 1, paddingBottom: 3 }}>
+    <Typography gutterBottom variant="h6" component="div">
+    Locations
+    </Typography>
+    {
+      pokemonInformation.encounters.map((encounter, index) => {
+        return (
+          <Accordion key={index} expanded={expandedLocation === index} onChange={handleChangeExpandedLocation(index)}>
+          <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls={`${index}-content`}
+          id={`${index}-header`}
+        >
+          <Typography>
+          {encounter.location.name} - {encounterDescriptionMap[encounter.method] || encounter.method}
+          </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+          <Typography>
+          Chance: {encounter.chance}
+          </Typography>
+          <Typography>
+          Levels: {encounter.minLevel} - {encounter.maxLevel}
+          </Typography>
+          {encounter.conditions && (
             <Typography>
-            {encounter.location.name} - {encounterDescriptionMap[encounter.method] || encounter.method}
+            {encounter.conditions.join('\n')}
             </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            <Typography>
-            Chance: {encounter.chance}
-            </Typography>
-            <Typography>
-            Levels: {encounter.minLevel} - {encounter.maxLevel}
-            </Typography>
-            {encounter.conditions && (
-              <Typography>
-              {encounter.conditions.join('\n')}
-              </Typography>
-            )}
-            </AccordionDetails>
-            </Accordion>
-          );
-        })
-      }
-      </Paper>
-      </Grid>
-      </Grid>
-      </Box>
+          )}
+          </AccordionDetails>
+          </Accordion>
+        );
+      })
+    }
+    </Paper>
+    </Grid>
+    </Grid>
+    </Box>
     </SwipeableDrawer>
     </>
   );
