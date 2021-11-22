@@ -34,7 +34,7 @@ const PokemonCard = (props: PokemonCardProps): ReactElement => {
     <CardMedia
     component="img"
     height="140"
-    image={caught ? props.image : undefined}
+    image={caught ? props.image?.art : undefined}
     sx={{ backgroundColor: caught ? 'transparent' : 'black' }}
     alt={props.name}
     />

@@ -115,6 +115,12 @@ const pokemonImageSchema = new Schema({
   shiny: String,
 });
 
+export interface PokemonImageType {
+  art: string;
+  default: string;
+  shiny: string;
+}
+
 const pokemonSchema = new Schema({
   id: Number,
   generation: Number,
@@ -139,7 +145,7 @@ export interface PokemonType {
   height: number;
   order: number;
   weight: number;
-  image: string;
+  image: PokemonImageType;
   abilities: AbilityType[];
   stats: StatType[];
   moves: MoveType[];
