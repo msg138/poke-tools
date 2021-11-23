@@ -1,0 +1,8 @@
+{
+  "name": "PokeTools",
+    "short_name": "PTools",
+    "theme_color": "#ffffff",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
