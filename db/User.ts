@@ -1,6 +1,41 @@
 import mongoose, { Schema } from 'mongoose';
 
-// Todo may need to involve schema from './Pokemon';
+const evIvSchema = new Schema({
+  hp: {
+    type: Number,
+    default: 0,
+  },
+  attack: {
+    type: Number,
+    default: 0,
+  },
+  defense: {
+    type: Number,
+    default: 0,
+  },
+  specialAttack: {
+    type: Number,
+    default: 0,
+  },
+  specialDefense: {
+    type: Number,
+    default: 0,
+  },
+  speed: {
+    type: Number,
+    default: 0,
+  },
+});
+
+export interface EvIvType {
+  hp: number;
+  attack: number;
+  defense: number;
+  specialAttack: number;
+  specialDefense: number;
+  speed: number;
+}
+
 const teamMemberSchema = new Schema({
   id: Number,
   name: String,
@@ -8,11 +43,16 @@ const teamMemberSchema = new Schema({
     type: Number,
     default: 1,
   },
+  ev: evIvSchema,
+  iv: evIvSchema,
 });
 
 export interface TeamMemberType {
   id: number;
   name: string;
+  level: number;
+  ev: EvIvType;
+  iv: EvIvType;
 }
 
 const teamSettingsSchema = new Schema({

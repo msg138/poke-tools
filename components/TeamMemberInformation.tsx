@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import CaughtModal from './CaughtModal';
 import TypeChip from './TypeChip';
 import api from '../utility/api';
+import type { TeamMemberType } from '../db/User';
 import type { TypeType } from '../db/Type';
 import type { PokemonType } from '../db/Pokemon';
 
@@ -25,6 +26,7 @@ export interface PokemonInformationProps {
   onClose: () => void;
   onOpen: () => void;
   pokemon?: PokemonType;
+  member?: TeamMemberType;
 }
 
 const encounterDescriptionMap = {
@@ -62,6 +64,10 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   if (!pokemonInformation) {
     return null;
   }
+
+  const updateEv = (name: string, amount: number) => {
+    // Todo perform put request here.
+  };
 
   const typeObjects = allTypes.filter((type) => {
     return (pokemonInformation && pokemonInformation.types && pokemonInformation.types.find((t) => t.type === type.name));
@@ -105,7 +111,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     <Grid item xs={12}>
     <Paper sx={{ padding: 1 }}>
     <Typography variant="h3" align="center" gutterBottom component="div">
-    {capitalize(pokemonInformation.name)}
+    {capitalize(props.member?.name)}
     </Typography>
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
     <Button color="secondary" variant="contained" onClick={() => setCatchingPokemon(true)}>Catch</Button>
@@ -186,43 +192,9 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
       );
     })}
     </List>
-    </Paper>
-    </Grid>
-    <Grid item xs={12}>
-    <Paper sx={{ padding: 1, paddingBottom: 3 }}>
     <Typography gutterBottom variant="h6" component="div">
-    Locations
+    EV Spread
     </Typography>
-    {
-      pokemonInformation.encounters.map((encounter, index) => {
-        return (
-          <Accordion key={index} expanded={expandedLocation === index} onChange={handleChangeExpandedLocation(index)}>
-          <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls={`${index}-content`}
-          id={`${index}-header`}
-        >
-          <Typography>
-          {encounter.location.name} - {encounterDescriptionMap[encounter.method] || encounter.method}
-          </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-          <Typography>
-          Chance: {encounter.chance}
-          </Typography>
-          <Typography>
-          Levels: {encounter.minLevel} - {encounter.maxLevel}
-          </Typography>
-          {encounter.conditions && (
-            <Typography>
-            {encounter.conditions.join('\n')}
-            </Typography>
-          )}
-          </AccordionDetails>
-          </Accordion>
-        );
-      })
-    }
     </Paper>
     </Grid>
     </Grid>

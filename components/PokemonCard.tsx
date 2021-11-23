@@ -21,7 +21,7 @@ const PokemonCard = (props: PokemonCardProps): ReactElement => {
   const caught = team.settings.hideUncaughtImage ? hasCaughtPokemon(team, props.id as number) : true;
 
   return (
-    <Grid item xs={12} sm={6} md={3}>
+    <Grid item xs={6} sm={4} md={3}>
     <Card sx={{ width: '100%' }} onClick={props.onClick}>
     <CardHeader
     avatar={

@@ -34,7 +34,7 @@ const CaughtModal = (props: CaughtModalProps) => {
     open={props.open}
     onClose={props.onClose}
     >
-    <Box sx={{ backgroundColor: 'white' }}>
+    <Box sx={{ backgroundColor: 'white', padding: 2 }}>
     <Typography gutterBottom variant="h5" component="div">
     Caught {capitalize(props.pokemonName)}
     </Typography>

@@ -70,6 +70,10 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
     <ListItemText primary="PokeDex" />
     </ListItem>
     <Divider />
+    <ListItem button onClick={navigate('/team')}>
+    <ListItemText primary="My Team" />
+    </ListItem>
+    <Divider />
     <ListItem button onClick={navigate('/profile')}>
     <ListItemText primary="Profile" />
     </ListItem>
