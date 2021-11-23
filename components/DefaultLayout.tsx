@@ -74,10 +74,6 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
     <ListItemText primary="My Team" />
     </ListItem>
     <Divider />
-    <ListItem button onClick={navigate('/profile')}>
-    <ListItemText primary="Profile" />
-    </ListItem>
-    <Divider />
     <ListItem button onClick={navigate('/logout')}>
     <ListItemText primary="Logout" />
     </ListItem>

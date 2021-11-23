@@ -14,7 +14,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import CaughtModal from './CaughtModal';
 import TypeChip from './TypeChip';
 import api from '../utility/api';
 import type { TeamMemberType } from '../db/User';
@@ -38,7 +37,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   const [pokemonInformation, setPokemonInformation] = useState<PokemonType | null>(null);
   const [expandedLocation, setExpandedLocation] = useState<number | false>(false);
   const [allTypes, setAllTypes] = useState<TypeType[]>([]);
-  const [catchingPokemon, setCatchingPokemon] = useState(false);
 
   const handleChangeExpandedLocation = (index: number) => (event, isExpanded) => {
     setExpandedLocation(isExpanded ? index : false)
@@ -64,6 +62,16 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   if (!pokemonInformation) {
     return null;
   }
+
+  const releasePokemon = () => {
+    console.log('Requesting with', props.member);
+    api('delete', '/team/pokemon', {
+      id: props.member.id,
+      name: props.member.name,
+    }).then(() => {
+      props.onClose();
+    });
+  };
 
   const updateEv = (name: string, amount: number) => {
     // Todo perform put request here.
@@ -97,7 +105,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
 
   return (
     <>
-    {pokemonInformation && (<CaughtModal open={catchingPokemon} pokemonId={pokemonInformation.id} pokemonName={pokemonInformation.name} onClose={() => setCatchingPokemon(false)} />)}
     <SwipeableDrawer
     anchor="bottom"
     open={props.open}
@@ -114,7 +121,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     {capitalize(props.member?.name)}
     </Typography>
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-    <Button color="secondary" variant="contained" onClick={() => setCatchingPokemon(true)}>Catch</Button>
+    <Button color="secondary" variant="contained" onClick={releasePokemon}>Release</Button>
     </Box>
     </Paper>
     </Grid>

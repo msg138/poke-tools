@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, useContext } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,6 +17,8 @@ import ListItemText from '@mui/material/ListItemText';
 import CaughtModal from './CaughtModal';
 import TypeChip from './TypeChip';
 import api from '../utility/api';
+import { hasCaughtPokemon } from '../utility/pokemon';
+import { teamContext } from '../context/Team';
 import type { TypeType } from '../db/Type';
 import type { PokemonType } from '../db/Pokemon';
 
@@ -37,6 +39,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   const [expandedLocation, setExpandedLocation] = useState<number | false>(false);
   const [allTypes, setAllTypes] = useState<TypeType[]>([]);
   const [catchingPokemon, setCatchingPokemon] = useState(false);
+  const { team } = useContext(teamContext);
 
   const handleChangeExpandedLocation = (index: number) => (event, isExpanded) => {
     setExpandedLocation(isExpanded ? index : false)
@@ -107,6 +110,11 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     <Typography variant="h3" align="center" gutterBottom component="div">
     {capitalize(pokemonInformation.name)}
     </Typography>
+    {hasCaughtPokemon(team, pokemonInformation.id) && (
+      <Typography variant="h6" align="center" gutterBottom component="div">
+      Caught
+      </Typography>
+    )}
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
     <Button color="secondary" variant="contained" onClick={() => setCatchingPokemon(true)}>Catch</Button>
     </Box>
@@ -140,33 +148,33 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
       })
     }
     {superEffectiveTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
-    Super Effective Against This
-    </Typography>
-    {superEffectiveTypes.map((type) => {
-      return (
-        <TypeChip type={type} key={type} />
-      );
-    })}</>)
+      Super Effective Against This
+      </Typography>
+      {superEffectiveTypes.map((type) => {
+        return (
+          <TypeChip type={type} key={type} />
+        );
+      })}</>)
     }
 
     {resistantTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
-    Resistant Against This
-    </Typography>
-    {resistantTypes.map((type) => {
-      return (
-        <TypeChip type={type} key={type} />
-      );
-    })}</>)
+      Resistant Against This
+      </Typography>
+      {resistantTypes.map((type) => {
+        return (
+          <TypeChip type={type} key={type} />
+        );
+      })}</>)
     }
 
     {immuneTypes.length > 0 && (<><Typography gutterBottom variant="h6" component="div">
-    Immune Against This
-    </Typography>
-    {immuneTypes.map((type) => {
-      return (
-        <TypeChip type={type} key={type} />
-      );
-    })}</>)
+      Immune Against This
+      </Typography>
+      {immuneTypes.map((type) => {
+        return (
+          <TypeChip type={type} key={type} />
+        );
+      })}</>)
     }
     </Paper>
     </Grid>

@@ -53,6 +53,24 @@ export default async function handler(
     });
     user.save();
     res.status(200).json({ message: 'Added pokemon successfully.' });
+  } else if (req.method === 'DELETE') {
+    if (!req.body.id || !req.body.name) {
+      res.status(403).json({ message: 'Pokemon Id and Name required.' });
+      return;
+    }
+    const id = Number.parseInt(req.body.id);
+    const team = user.getCurrentTeam();
+    const name = req.body.name;
+    const memberToRemove = team.members.findIndex((member) => {
+      return member.id === id && member.name === name;
+    });
+    if (memberToRemove < 0) {
+      res.status(403).json({ message: 'Pokemon does not exist in team!' });
+      return;
+    }
+    team.members.splice(memberToRemove, 1);
+    user.save();
+    res.status(200).json({ message: 'Removed pokemon successfully.' });
   } else {
     res.status(403).json({ message: 'Invalid method.' })
   }

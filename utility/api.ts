@@ -35,7 +35,12 @@ const api = async (method: 'get' | 'post' | 'delete' | 'put', path: string, data
     return JSON.parse(totalData);
   }
   try {
-    const result = await axiosInstance[method](finalPath, data);
+    let result;
+    if (method === 'delete') {
+      result = await axiosInstance.delete(finalPath, { data });
+    } else {
+      result = await axiosInstance[method](finalPath, data);
+    }
     if (method === 'get' && !noCache) {
       const dataToCache = JSON.stringify({
         data: result.data,
