@@ -43,8 +43,12 @@ const teamMemberSchema = new Schema({
     type: Number,
     default: 1,
   },
-  ev: evIvSchema,
-  iv: evIvSchema,
+  ev: {
+    type: evIvSchema,
+  },
+  iv: {
+    type: evIvSchema,
+  },
 });
 
 export interface TeamMemberType {

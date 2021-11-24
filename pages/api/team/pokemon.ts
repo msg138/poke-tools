@@ -51,7 +51,7 @@ export default async function handler(
       name,
       level: req.body.level ? Number.parseInt(req.body.level) : 1,
     });
-    user.save();
+    await user.save();
     res.status(200).json({ message: 'Added pokemon successfully.' });
   } else if (req.method === 'DELETE') {
     if (!req.body.id || !req.body.name) {
@@ -69,8 +69,43 @@ export default async function handler(
       return;
     }
     team.members.splice(memberToRemove, 1);
-    user.save();
+    await user.save();
     res.status(200).json({ message: 'Removed pokemon successfully.' });
+  } else if (req.method === 'PUT') {
+    if (!req.body.id || !req.body.name) {
+      res.status(403).json({ message: 'Pokemon Id and Name required.' });
+      return;
+    }
+    const id = Number.parseInt(req.body.id);
+    const team = user.getCurrentTeam();
+    const name = req.body.name;
+    const member = team.members.find((member) => {
+      return member.id === id && member.name === name;
+    });
+    if (!member) {
+      res.status(403).json({ message: 'Pokemon does not exist in team!' });
+      return;
+    }
+    if (req.body.evStat) {
+      try {
+        const evStat = req.body.evStat;
+        if (member.ev == null) {
+          member.ev = {};
+        }
+        if (member.ev[evStat] == null) {
+          member.ev[evStat] = 0;
+        }
+        member.ev[evStat] += Number.parseInt(req.body.evChange);
+        console.log('New EV', member.ev);
+      } catch (e) {
+        console.log(e);
+        res.status(403).json({ message: 'Invalid Ev values provided.' });
+        return;
+      }
+    }
+
+    await user.save();
+    res.status(200).json({ message: 'Updated pokemon successfully.' });
   } else {
     res.status(403).json({ message: 'Invalid method.' })
   }

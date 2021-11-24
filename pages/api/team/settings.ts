@@ -23,14 +23,20 @@ export default async function handler(
     return;
   }
   if (req.method === 'PUT') {
+    if (req.body.name) {
+      user.getCurrentTeam().name = req.body.name;
+      await user.save();
+      res.status(200).json({ message: 'Updated' })
+      return;
+    }
     const settings = req.body.settings;
     if (!settings) {
       res.status(403).json({ message: 'Require settings to be passed.' });
       return;
     }
     user.getCurrentTeam().settings = settings;
-    user.save();
-    res.status(200).json({ message: 'Updated generation successfully.' });
+    await user.save();
+    res.status(200).json({ message: 'Updated settings successfully.' });
   } else {
     res.status(403).json({ message: 'Invalid method.' })
   }

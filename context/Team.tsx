@@ -12,13 +12,14 @@ const teamSettingsDefaults = {
 };
 
 const TeamProvider = (props): ReactElement => {
-  const [team, setTeam] = useState({ name: 'loading', generation: 0, settings: teamSettingsDefaults, members: [] });
+  const [team, setTeam] = useState({ name: 'loading', generation: 0, settings: teamSettingsDefaults, members: [], teams: [], });
 
   const updateTeam = () => {
     api('get', '/team', undefined, true).then((t) => {
       const teamApi = t.data.data;
       setTeam({
-        ...teamApi,
+        ...teamApi.team,
+        teams: teamApi.teams,
         settings: teamApi.settings ? {
           ...teamSettingsDefaults,
           ...teamApi.settings,

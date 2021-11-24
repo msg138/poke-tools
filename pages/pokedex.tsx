@@ -3,6 +3,8 @@ import axios from 'axios';
 import api from '../utility/api';
 import type { PokemonType } from '../db/Pokemon';
 import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 import DefaultLayout from '../components/DefaultLayout';
 import Grid from '@mui/material/Grid';
 import PokemonCard from '../components/PokemonCard';
@@ -55,6 +57,15 @@ const Pokedex = (): ReactElement => {
     onChange={handleSearchChange}
     />
     </Grid>
+    {visiblePokemons.length === 0 && (
+      <Grid item xs={12}>
+      <Card sx={{ padding: 2 }}>
+      <Typography variant="h6" component="div" align="center">
+      No Pokemon Found.
+      </Typography>
+      </Card>
+      </Grid>
+    )}
     {
       visiblePokemons.map((entry) => {
         return (

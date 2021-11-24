@@ -1,7 +1,10 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useContext, useState, useEffect } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -16,6 +19,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import TypeChip from './TypeChip';
 import api from '../utility/api';
+import { teamContext } from '../context/Team';
 import type { TeamMemberType } from '../db/User';
 import type { TypeType } from '../db/Type';
 import type { PokemonType } from '../db/Pokemon';
@@ -28,6 +32,15 @@ export interface PokemonInformationProps {
   member?: TeamMemberType;
 }
 
+const defaultEvs = {
+  hp: 0,
+  attack: 0,
+  defense: 0,
+  specialAttack: 0,
+  specialDefense: 0,
+  speed: 0,
+};
+
 const encounterDescriptionMap = {
   walk: 'Walking',
   gift: 'Gifted',
@@ -37,10 +50,11 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   const [pokemonInformation, setPokemonInformation] = useState<PokemonType | null>(null);
   const [expandedLocation, setExpandedLocation] = useState<number | false>(false);
   const [allTypes, setAllTypes] = useState<TypeType[]>([]);
+  const { updateTeam, team } = useContext(teamContext);
 
   const handleChangeExpandedLocation = (index: number) => (event, isExpanded) => {
     setExpandedLocation(isExpanded ? index : false)
-  }
+  };
 
   useEffect(() => {
     if (props.pokemon) {
@@ -50,7 +64,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     }
     api('get', '/type').then(({ data }) => {
       setAllTypes(data.data);
-      console.log('set all types', data.data);
     });
   }, [props.pokemon]);
 
@@ -60,6 +73,12 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   }
 
   if (!pokemonInformation) {
+    return null;
+  }
+
+  const member = team.members.find((m) => m.id === props.member.id && m.name === props.member.name);
+
+  if (!member) {
     return null;
   }
 
@@ -73,8 +92,13 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     });
   };
 
-  const updateEv = (name: string, amount: number) => {
-    // Todo perform put request here.
+  const updateEv = (name: string, amount: number) => () => {
+    api('put', '/team/pokemon', {
+      id: props.member.id,
+      name: props.member.name,
+      evStat: name,
+      evChange: amount,
+    }).then(updateTeam);
   };
 
   const typeObjects = allTypes.filter((type) => {
@@ -202,6 +226,20 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     <Typography gutterBottom variant="h6" component="div">
     EV Spread
     </Typography>
+    <List>
+    {Object.keys(member.ev || defaultEvs).filter((key) => key !== '_id').map((evStat) => {
+      const value = member.ev ? member.ev[evStat] : defaultEvs[evStat];
+      return (
+        <ListItem key={evStat}>
+        <ListItemText primary={`${evStat}: ${value}`} />
+        <ButtonGroup variant="contained">
+        <Button disabled={value === 0} onClick={updateEv(evStat, -1)}><RemoveIcon /></Button>
+        <Button disabled={value === 255} onClick={updateEv(evStat, 1)}><AddIcon /></Button>
+        </ButtonGroup>
+        </ListItem>
+      );
+    })}
+    </List>
     </Paper>
     </Grid>
     </Grid>

@@ -32,7 +32,7 @@ export default async function handler(
       res.status(403).json({ message: 'Invalid Generation.' });
     }
     user.getCurrentTeam().generation = generationNumber;
-    user.save();
+    await user.save();
     res.status(200).json({ message: 'Updated generation successfully.' });
   } else {
     res.status(403).json({ message: 'Invalid method.' })

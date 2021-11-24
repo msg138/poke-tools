@@ -3,8 +3,10 @@ import axios from 'axios';
 import api, { clearCache } from '../utility/api';
 import type { PokemonType } from '../db/Pokemon';
 import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
 import DefaultLayout from '../components/DefaultLayout';
@@ -13,6 +15,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 import PokemonCard from '../components/PokemonCard';
@@ -27,6 +32,9 @@ const Pokedex = (): ReactElement => {
   const [currentPokemon, setCurrentPokemon] = useState<null | PokemonType>(null);
   const [visiblePokemons, setVisiblePokemons] = useState<Array<object>>([]);
   const [search, setSearch] = useState('');
+  const [newTeamName, setNewTeamName] = useState('');
+  const [newTeamGeneration, setNewTeamGeneration] = useState(1);
+
 
   useEffect(() => {
     api('get', '/pokemon').then(({ data }) => {
@@ -42,8 +50,9 @@ const Pokedex = (): ReactElement => {
     });
   };
 
-  const updateSettings = (settings: any): Promise<void> => {
+  const updateSettings = (settings: any, name?: string): Promise<void> => {
     return api('put', '/team/settings', {
+      name,
       settings,
     });
   };
@@ -74,6 +83,7 @@ const Pokedex = (): ReactElement => {
     <Tabs value={currentTab} onChange={(_, newValue) => setCurrentTab(newValue)}>
     <Tab label="Pokemon" />
     <Tab label="Settings" />
+    <Tab label="Teams" />
     </Tabs>
     </Grid>
     {currentTab === 0 && (<>
@@ -88,6 +98,15 @@ const Pokedex = (): ReactElement => {
       />
       <teamContext.Consumer>
       {({ team }) => {
+        if (team.members.length === 0) {
+          return (
+            <Card sx={{ padding: 2 }}>
+            <Typography variant="h6" align="center" component="div">
+            No pokemon on Team. Visit the Pokedex to Add some.
+            </Typography>
+            </Card>
+          );
+        }
         return visiblePokemons.map((vp) => {
           return {
             pokemon: vp,
@@ -143,9 +162,17 @@ const Pokedex = (): ReactElement => {
           }).then(updateTeam);
         };
 
+        const handleUpdateName = (name: string) => {
+          // Todo implement waiting certain time, to not overload with requests.
+          updateSettings({}, name).then(updateTeam);
+        };
+
         return (
           <Grid item xs={12}>
           <List>
+          <ListItem>
+          <TextField label="Team Name" onChange={(e) => handleUpdateName(e.target.value)} defaultValue={team.name} />
+          </ListItem>
           <ListItem>
           <FormControl sx={{ width: '100%' }}>
           <InputLabel id="generation-select-label">Generation</InputLabel>
@@ -165,6 +192,72 @@ const Pokedex = (): ReactElement => {
           <ListItem>
           <FormControlLabel sx={{ width: '100%' }} label="Hide Uncaught Pokemon Images" control={<Switch checked={!!team.settings.hideUncaughtImage} onChange={(e) => handleUpdateSettings('hideUncaughtImage', e.target.checked)} />} />
           </ListItem>
+          </List>
+          </Grid>
+        );
+      }}
+      </teamContext.Consumer>)
+    }
+    {/* Team List Panel */}
+    {currentTab === 2 && (
+      <teamContext.Consumer>
+      {({ team, updateTeam }) => {
+        const createTeam = () => {
+          api('post', '/team', {
+            name: newTeamName,
+            generation: newTeamGeneration,
+          }).then(() => {
+            updateTeam();
+            setNewTeamName('');
+          });
+        };
+
+        const changeTeam = (teamName: string) => () => {
+          api('put', '/team', {
+            name: teamName,
+          }).then(updateTeam);
+        };
+
+        const deleteTeam = (teamName: string) => () => {
+          api('delete', '/team', {
+            name: teamName,
+          }).then(updateTeam);
+        };
+
+        return (
+          <Grid item xs={12}>
+          <List>
+          <ListItem>
+          <TextField label="Create New Team" value={newTeamName} onChange={(e) => setNewTeamName(e.target.value)} />
+          <FormControl sx={{ width: '100%' }}>
+          <InputLabel id="generation-select-label">Generation</InputLabel>
+          <Select
+          labelId="generation-select-label"
+          id="generation-select"
+          value={newTeamGeneration}
+          label="Generation"
+          onChange={(e) => setNewTeamGeneration(e.target.value)}
+        >
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((gen) => (
+            <MenuItem key={gen} value={gen}>{gen}</MenuItem>
+          ))}
+          </Select>
+          </FormControl>
+          <Button onClick={createTeam}>Create</Button>
+          </ListItem>
+          {team.teams.map((t) => {
+            return (
+              <ListItem key={t.name}>
+              <ListItemText>{t.name} - G{t.generation}</ListItemText>
+              {t.name !== team.name && (
+                <ButtonGroup variant="contained">
+                <Button onClick={changeTeam(t.name)}>Use</Button>
+                <Button onClick={deleteTeam(t.name)} color="error">Delete</Button>
+                </ButtonGroup>
+              )}
+              </ListItem>
+            )
+          })}
           </List>
           </Grid>
         );
