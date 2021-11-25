@@ -211,7 +211,7 @@ try {
           stats: pokemon.stats.map((stat) => ({
             base: stat.base_stat,
             effort: stat.effort,
-            stat: stat.stat.name,
+            stat: stat.stat.name === 'special-attack' ? 'specialAttack' : stat.stat.name === 'special-defense' ? 'specialDefense' : stat.stat.name,
           })),
           types: pokemonTypes,
           moves: pokemonMoves,
