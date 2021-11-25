@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     however I try to fit most use cases for myself personally.
     </Typography>
     <Typography gutterBottom>
-    With PokeTools you have the option to create Teams. These are essentially separate "play-throughs" that keep the pokemon you catch,
+    With PokeTools you have the option to create Teams. These are essentially separate &quot;play-throughs&quot; that keep the pokemon you catch,
     shiny hunts and other gameplay specific information separate.
     </Typography>
     <Typography gutterBottom>
