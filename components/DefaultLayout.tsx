@@ -74,6 +74,10 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
     <ListItemText primary="My Team" />
     </ListItem>
     <Divider />
+    <ListItem button onClick={navigate('/shiny')}>
+    <ListItemText primary="Shiny Hunt" />
+    </ListItem>
+    <Divider />
     <ListItem button onClick={navigate('/logout')}>
     <ListItemText primary="Logout" />
     </ListItem>

@@ -8,7 +8,6 @@ export interface TeamProviderProps {
 }
 
 const teamSettingsDefaults = {
-  showNationalDex: false,
 };
 
 const TeamProvider = (props): ReactElement => {
@@ -17,14 +16,16 @@ const TeamProvider = (props): ReactElement => {
   const updateTeam = () => {
     api('get', '/team', undefined, true).then((t) => {
       const teamApi = t.data.data;
-      setTeam({
+      const newTeam = {
         ...teamApi.team,
         teams: teamApi.teams,
-        settings: teamApi.settings ? {
+        settings: teamApi.team.settings ? {
           ...teamSettingsDefaults,
-          ...teamApi.settings,
+          ...teamApi.team.settings,
         } : teamSettingsDefaults,
-      });
+      };
+      console.log(newTeam);
+      setTeam(newTeam);
     });
   }
 

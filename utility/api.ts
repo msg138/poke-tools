@@ -37,7 +37,7 @@ const api = async (method: 'get' | 'post' | 'delete' | 'put', path: string, data
   try {
     let result;
     if (method === 'delete') {
-      result = await axiosInstance.delete(finalPath, { data });
+      result = await axiosInstance[method](finalPath, { data });
     } else {
       result = await axiosInstance[method](finalPath, data);
     }

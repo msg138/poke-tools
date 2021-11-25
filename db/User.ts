@@ -59,15 +59,25 @@ export interface TeamMemberType {
   iv: EvIvType;
 }
 
+const shinyCountSchema = new Schema({
+  count: Object,
+});
+
+export interface ShinyCountType {
+  count: Record<string, number>;
+}
+
 const teamSettingsSchema = new Schema({
   hideUncaughtImage: {
     type: Boolean,
     default: false,
   },
+  shinyCount: shinyCountSchema,
 });
 
 export interface TeamSettingsType {
   hideUncaughtImage: boolean;
+  shinyCount: ShinyCountType;
 }
 
 const teamSchema = new Schema({
