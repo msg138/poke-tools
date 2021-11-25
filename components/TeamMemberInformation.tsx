@@ -403,7 +403,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     <ToggleButtonGroup exclusive value={currentItem} onChange={(_, newItem) => setCurrentItem(newItem)}>
     {evEnhancement.map((evEnhancer) => {
       return (
-        <ToggleButton value={evEnhancer.name}>
+        <ToggleButton key={evEnhancer.name} value={evEnhancer.name}>
         <img src={evEnhancer.img} />
         {evEnhancer.name}
         </ToggleButton>
