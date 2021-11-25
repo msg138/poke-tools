@@ -234,6 +234,9 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   };
 
   const defeatPokemon = () => {
+    if (!defeatPokemonText) {
+      return;
+    }
     const pokemon = allPokemon.find(({ id }) => id === defeatPokemonText.id);
     if (pokemon) {
       return calculateEvGain(pokemon.id);
@@ -420,7 +423,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     value={defeatPokemonText}
     onChange={(e, newValue) => setDefeatPokemonText(newValue)}
     />
-    <Button color="primary" variant="contained" fullWidth onClick={defeatPokemon}>Defeat</Button>
+    <Button disabled={!defeatPokemonText} color="primary" variant="contained" fullWidth onClick={defeatPokemon}>Defeat</Button>
     </Paper>
     </Grid>
     </Grid>

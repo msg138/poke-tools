@@ -77,7 +77,7 @@ const api = async (method: 'get' | 'post' | 'delete' | 'put', path: string, data
       saveToken(null);
       window.location = '/login';
     }
-    console.log(error);
+    window.queueAlert(error?.response?.data?.message || 'An error occurred.');
   }
 };
 

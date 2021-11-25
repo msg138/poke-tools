@@ -74,8 +74,14 @@ export default async function handler(
       res.status(403).json({ message: 'Shiny hunt does not exist!' });
       return;
     }
+    if (team.settings.shinyCount.count[name] < 0 && change < 0) {
+      res.status(403).json({ message: 'Cannot go below zero for a shiny hunt!' });
+      return;
+    }
     team.settings.shinyCount.count[name] += change;
-    console.log(team.settings.shinyCount)
+    if (team.settings.shinyCount.count[name] < 0) {
+      team.settings.shinyCount.count[name] = 0;
+    }
     user.markModified('teams');
     await user.save();
     res.status(200).json({ message: 'Updated shiny hunt count successfully.', data: { newCount: team.settings.shinyCount.count[name] } });

@@ -1,6 +1,8 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useRef, useState, useEffect } from 'react';
 import Head from 'next/head';
 import AppBar from '@mui/material/AppBar';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -37,11 +39,50 @@ const pathValueMap = {
 
 const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
   const [menuOpen, toggleMenu, openMenu, closeMenu] = useToggle();
+  const [currentAlert, setCurrentAlert] = useState<string | null>(null);
+  const [alerts, setAlerts] = useState([]);
+  const alertTimeout = useRef();
   const router = useRouter();
 
   const navigate = (location: string) => () => {
     closeMenu();
     router.push(location);
+  };
+
+  useEffect(() => {
+    window.queueAlert = (alert) => {
+      console.log('Queing', alert);
+      setAlerts((al) => {
+        return al.concat(alert)
+      });
+    };
+  }, [setAlerts]);
+
+  useEffect(() => {
+    if (alerts.length === 0) {
+      setCurrentAlert(null);
+      return;
+    }
+
+    alertTimeout.current = window.setTimeout(() => {
+      nextAlert();
+    }, 5000);
+    const newAlert = alerts[0];
+    setCurrentAlert(newAlert);
+
+    return () => {
+      if (alertTimeout.current) {
+        window.clearTimeout(alertTimeout.current);
+      }
+    };
+  }, [alerts, alerts.length]);
+
+  const nextAlert = () => {
+    if (alertTimeout.current) {
+      window.clearTimeout(alertTimeout.current);
+      alertTimeout.current = null;
+    }
+    setAlerts((al) => al.slice(1));
   };
 
   return (
@@ -122,6 +163,13 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
     <BottomNavigationAction onClick={navigate('/shiny')} label="Shiny Hunt" icon={<FlareIcon />} />
     </BottomNavigation>
     </Paper>
+    {currentAlert && (
+      <Snackbar open onClose={nextAlert}>
+      <Alert elevation={6} variant="filled" onClose={nextAlert} severity="error" sx={{ width: '100%' }}>
+      {currentAlert}
+      </Alert>
+      </Snackbar>
+    )}
     </div>
   );
 };
