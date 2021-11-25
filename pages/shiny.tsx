@@ -87,7 +87,7 @@ const Shiny: NextPage = () => {
           <Card sx={{ padding: 2 }}>
           <List>
           {
-            Object.keys(team.settings.shinyCount.count).filter((k) => k !== '_id').map((count) => {
+            Object.keys(team.settings.shinyCount.count).filter((k) => k !== '_id' && (!team.settings.shinyCount.deleted || team.settings.shinyCount.deleted.indexOf(k) === -1)).map((count) => {
               return (
                 <ListItem key={count}>
                 <ListItemText primary={`${count} - ${team.settings.shinyCount.count[count]}`} />

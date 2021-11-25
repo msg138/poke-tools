@@ -61,10 +61,12 @@ export interface TeamMemberType {
 
 const shinyCountSchema = new Schema({
   count: Object,
+  deleted: [String],
 });
 
 export interface ShinyCountType {
   count: Record<string, number>;
+  deleted: string[];
 }
 
 const teamSettingsSchema = new Schema({

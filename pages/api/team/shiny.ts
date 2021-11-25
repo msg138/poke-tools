@@ -35,7 +35,11 @@ export default async function handler(
         count: {},
       };
     }
-    team.settings.shinyCount.count[name] = 0;
+    if (team.settings.shinyCount.deleted && team.settings.shinyCount.deleted.indexOf(name) !== -1) {
+      team.settings.shinyCount.deleted = team.settings.shinyCount.deleted.filter((deleted) => deleted !== name);
+    } else {
+      team.settings.shinyCount.count[name] = 0;
+    }
     user.markModified('teams');
     await user.save();
     res.status(200).json({ message: 'Created new shiny hunt successfully.' });
@@ -51,7 +55,10 @@ export default async function handler(
       res.status(403).json({ message: 'Shiny hunt does not exist with name!' });
       return;
     }
-    delete team.settings.shinyCount.count[name];
+    if (!team.settings.shinyCount.deleted) {
+      team.settings.shinyCount.deleted = [];
+    }
+    team.settings.shinyCount.deleted.push(name);
     user.markModified('teams');
     await user.save();
     res.status(200).json({ message: 'Deleted shiny hunt successfully.' });
