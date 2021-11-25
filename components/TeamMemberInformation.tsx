@@ -111,7 +111,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   let resistantTypes = typeObjects.reduce((current, typeObject) => {
     return [...current, ...typeObject.defenseResistance];
   }, []);
-  const immuneTypes = typeObjects.reduce((current, typeObject) => {
+  let immuneTypes = typeObjects.reduce((current, typeObject) => {
     return [...current, ...typeObject.defenseImmune];
   }, []);
 
@@ -125,6 +125,16 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   });
   resistantTypes = resistantTypes.filter((type) => {
     return superEffectiveResistant.indexOf(type) === -1;
+  });
+
+  superEffectiveTypes = superEffectiveTypes.filter((type, position) => {
+    return superEffectiveTypes.indexOf(type) === position;
+  });
+  resistantTypes = resistantTypes.filter((type, position) => {
+    return resistantTypes.indexOf(type) === position;
+  });
+  immuneTypes = immuneTypes.filter((type, position) => {
+    return immuneTypes.indexOf(type) === position;
   });
 
   return (
