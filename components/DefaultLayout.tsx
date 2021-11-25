@@ -51,7 +51,6 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
 
   useEffect(() => {
     window.queueAlert = (alert) => {
-      console.log('Queing', alert);
       setAlerts((al) => {
         return al.concat(alert)
       });

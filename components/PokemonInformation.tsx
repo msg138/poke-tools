@@ -53,7 +53,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     }
     api('get', '/type').then(({ data }) => {
       setAllTypes(data.data);
-      console.log('set all types', data.data);
     });
   }, [props.pokemon]);
 

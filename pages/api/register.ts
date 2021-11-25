@@ -44,15 +44,9 @@ export default async function handler(
           teams: [defaultTeam],
           currentTeam: 0,
         });
-        newUser.save((err) => {
-          if (err) {
-            console.error('Error', err);
-            res.status(403).json({ message: 'Error occurred on server.' });
-          } else {
-            console.log('Created new user', username);
-            res.status(200).json({ message: 'User created!' });
-          }
-        })
+        await newUser.save();
+        console.log('Created new user', username);
+        res.status(200).json({ message: 'User created!' });
       }
     }
   } else {

@@ -178,7 +178,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   }
 
   const releasePokemon = () => {
-    console.log('Requesting with', props.member);
     api('delete', '/team/pokemon', {
       id: props.member.id,
       name: props.member.name,
@@ -188,7 +187,6 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
   };
 
   const updateEv = (name: string, amount: number) => () => {
-    console.log('Updating ', name, 'by', amount);
     api('put', '/team/pokemon', {
       id: props.member.id,
       name: props.member.name,
@@ -212,18 +210,16 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
         evs[stat.stat] += stat.effort;
       }
     });
-    console.log('before', evs);
     evEnhancement.forEach((enhancement) => {
       if (currentItem === enhancement.name) {
         evs = enhancement.ev(evs);
       }
     });
-    if (pokerus) {
+    if (pokerus && pokerus.length > 0) {
       Object.keys(evs).forEach((ev) => {
         evs[ev] = evs[ev] * 2;
       });
     }
-    console.log('after', evs);
     await Promise.all(Object.keys(evs).map((ev) => {
       if (evs[ev] === 0) {
         return;

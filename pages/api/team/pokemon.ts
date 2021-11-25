@@ -96,7 +96,6 @@ export default async function handler(
           member.ev[evStat] = 0;
         }
         member.ev[evStat] += Number.parseInt(req.body.evChange);
-        console.log('New EV', member.ev);
       } catch (e) {
         console.log(e);
         res.status(403).json({ message: 'Invalid Ev values provided.' });
