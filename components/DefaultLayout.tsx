@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import Head from 'next/head';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -45,6 +46,9 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
 
   return (
     <div style={{ paddingTop: 100, }}>
+    <Head>
+    <link rel="manifest" href="/manifest.json" />
+    </Head>
     <TeamProvider>
     <AppBar>
     <Toolbar>
