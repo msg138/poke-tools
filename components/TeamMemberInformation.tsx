@@ -400,7 +400,7 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     PokeRus
     </ToggleButton>
     </ToggleButtonGroup>
-    <ToggleButtonGroup exclusive value={currentItem} onChange={(_, newItem) => setCurrentItem(newItem)}>
+    <ToggleButtonGroup exclusive sx={{ maxWidth: '100%', overflow: 'auto', }} value={currentItem} onChange={(_, newItem) => setCurrentItem(newItem)}>
     {evEnhancement.map((evEnhancer) => {
       return (
         <ToggleButton key={evEnhancer.name} value={evEnhancer.name}>
