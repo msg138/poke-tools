@@ -140,8 +140,8 @@ const Shiny: NextPage = () => {
           </Grid>
           <Grid item xs={8}>
           <Card sx={{ display: 'flex', justifyContent: 'flex-end', padding: 2 }}>
-          <IconButton sx={{ width: 100, height: 100 }} onClick={updateTeamAfter(modifyShinyCount(-1))} disabled={team.settings.shinyCount.count[currentShinyCount] === 0}><RemoveIcon /></IconButton>
-          <IconButton sx={{ width: 100, height: 100 }} onClick={updateTeamAfter(modifyShinyCount(1))}><AddIcon /></IconButton>
+          <IconButton color="error" sx={{ width: 100, height: 100 }} onClick={updateTeamAfter(modifyShinyCount(-1))} disabled={team.settings.shinyCount.count[currentShinyCount] === 0}><RemoveIcon /></IconButton>
+          <IconButton color="primary" sx={{ width: 100, height: 100 }} onClick={updateTeamAfter(modifyShinyCount(1))}><AddIcon /></IconButton>
           </Card>
           </Grid>
           <Grid item xs={12}>
