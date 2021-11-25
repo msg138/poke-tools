@@ -2,9 +2,12 @@ import React, { ReactElement, useMemo, useContext, useState, useEffect } from 'r
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import CloseIcon from '@mui/icons-material/Close';
+import Toolbar from '@mui/material/Toolbar';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -287,6 +290,13 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     sx={{ minHeight: '80vh', padding: 1 }}
   >
     <Grid container spacing={2}>
+    <Grid item xs={12}>
+    <Toolbar sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <IconButton onClick={handleClose}>
+    <CloseIcon />
+    </IconButton>
+    </Toolbar>
+    </Grid>
     <Grid item xs={12}>
     <Paper sx={{ padding: 1 }}>
     <Typography variant="h3" align="center" gutterBottom component="div">

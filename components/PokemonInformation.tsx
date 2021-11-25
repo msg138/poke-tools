@@ -2,6 +2,9 @@ import React, { ReactElement, useState, useEffect, useContext } from 'react';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -114,6 +117,13 @@ const PokemonInformation = (props: PokemonInformationProps): ReactElement => {
     sx={{ minHeight: '80vh', padding: 1 }}
   >
     <Grid container spacing={2}>
+    <Grid item xs={12}>
+    <Toolbar sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <IconButton onClick={handleClose}>
+    <CloseIcon />
+    </IconButton>
+    </Toolbar>
+    </Grid>
     <Grid item xs={12}>
     <Paper sx={{ padding: 1 }}>
     <Typography variant="h3" align="center" gutterBottom component="div">
