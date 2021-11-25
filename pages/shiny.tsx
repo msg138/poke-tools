@@ -147,7 +147,7 @@ const Shiny: NextPage = () => {
           <Grid item xs={12}>
           <Card sx={{ padding: 2 }}>
           <Button color="primary" variant="outlined" fullWidth onClick={() => setCurrentShinyCount(null)}>
-          Quit
+          Go Back
           </Button>
           </Card>
           </Grid>
