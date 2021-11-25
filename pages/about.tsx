@@ -22,37 +22,23 @@ const Home: NextPage = () => {
     Poke Tools
     </Typography>
     </Grid>
-    <Grid item xs={6} sm={4} md={3}>
-    <Link href="/pokedex">
-    <Card sx={{ padding: 2, cursor: 'pointer' }}>
-    <CatchingPokemonTwoToneIcon sx={{ width: '100%', height: 100 }} />
-    <Typography variant="h6" component="div" align="center">
-    PokeDex
+    <Grid item xs={12}>
+    <Card sx={{ padding: 2 }}>
+    <Typography gutterBottom>
+    Poke Tools is a collection of tools to augment your Pokemon gameplay experience. These are NOT designed to fit every need,
+    however I try to fit most use cases for myself personally.
+    </Typography>
+    <Typography gutterBottom>
+    With PokeTools you have the option to create Teams. These are essentially separate "play-throughs" that keep the pokemon you catch,
+    shiny hunts and other gameplay specific information separate.
+    </Typography>
+    <Typography gutterBottom>
+    I hope that you enjoy using this tool that I have made, and if you have comments, let me know at <a href="mailto:michaelg@kaspyre.com">michaelg@kaspyre.com</a>
+    </Typography>
+    <Typography>
+    - Best Wishes, MichaelG
     </Typography>
     </Card>
-    </Link>
-    </Grid>
-    {/* Team Link */}
-    <Grid item xs={6} sm={4} md={3}>
-    <Link href="/team">
-    <Card sx={{ padding: 2, cursor: 'pointer' }}>
-    <GroupIcon sx={{ width: '100%', height: 100 }} />
-    <Typography variant="h6" component="div" align="center">
-    My Team
-    </Typography>
-    </Card>
-    </Link>
-    </Grid>
-    {/* Shiny Hunt Link */}
-    <Grid item xs={6} sm={4} md={3}>
-    <Link href="/shiny">
-    <Card sx={{ padding: 2, cursor: 'pointer' }}>
-    <FlareIcon sx={{ width: '100%', height: 100 }} />
-    <Typography variant="h6" component="div" align="center">
-    Shiny Hunt
-    </Typography>
-    </Card>
-    </Link>
     </Grid>
     </Grid>
     </DefaultLayout>

@@ -3,8 +3,15 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
+import GroupIcon from '@mui/icons-material/Group';
+import FlareIcon from '@mui/icons-material/Flare';
+import CatchingPokemonTwoToneIcon from '@mui/icons-material/CatchingPokemonTwoTone';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -19,6 +26,13 @@ export interface DefaultLayoutProps {
   children: any;
   loading?: boolean;
 }
+
+const pathValueMap = {
+  '/': 0,
+  '/pokedex': 1,
+  '/team': 2,
+  '/shiny': 3,
+};
 
 const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
   const [menuOpen, toggleMenu, openMenu, closeMenu] = useToggle();
@@ -43,9 +57,6 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
   >
     <MenuIcon />
     </IconButton>
-    <Typography variant="h6" component="div">
-    Poke Tools
-    </Typography>
     <teamContext.Consumer>
     {({ team }) => (
       <Typography sx={{ marginLeft: 3 }} variant="h6" component="div">
@@ -78,6 +89,10 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
     <ListItemText primary="Shiny Hunt" />
     </ListItem>
     <Divider />
+    <ListItem button onClick={navigate('/about')}>
+    <ListItemText primary="About" />
+    </ListItem>
+    <Divider />
     <ListItem button onClick={navigate('/logout')}>
     <ListItemText primary="Logout" />
     </ListItem>
@@ -92,6 +107,17 @@ const DefaultLayout = (props: DefaultLayoutProps): ReactElement => {
       : props.children
     }
     </TeamProvider>
+    <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+    <BottomNavigation
+    showLabels
+    value={pathValueMap[router.pathname]}
+    >
+    <BottomNavigationAction onClick={navigate('/')} label="Home" icon={<HomeIcon />} />
+    <BottomNavigationAction onClick={navigate('/pokedex')} label="PokeDex" icon={<CatchingPokemonTwoToneIcon />} />
+    <BottomNavigationAction onClick={navigate('/team')} label="Team" icon={<GroupIcon />} />
+    <BottomNavigationAction onClick={navigate('/shiny')} label="Shiny Hunt" icon={<FlareIcon />} />
+    </BottomNavigation>
+    </Paper>
     </div>
   );
 };
