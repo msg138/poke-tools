@@ -30,7 +30,7 @@ export default async function handler(
       return;
     }
     const settings = req.body.settings;
-    if (!settings) {
+    if (!settings || Object.keys(settings).length === 0) {
       res.status(403).json({ message: 'Require settings to be passed.' });
       return;
     }
