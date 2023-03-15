@@ -1,5 +1,5 @@
 {
-  "name": "myr",
+  "name": "poke-tools",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,6 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/base": "^5.0.0-alpha.121",
+    "@mui/lab": "^5.0.0-alpha.123",
+    "@mui/material": "^5.11.13",
+    "dexie": "^3.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
